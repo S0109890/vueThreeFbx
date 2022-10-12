@@ -6,6 +6,22 @@ import * as THREE from 'three'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Stats } from 'three/examples/jsm/libs/stats.module.js'
+import {
+  BufferGeometry,
+  FileLoader,
+  Float32BufferAttribute,
+  Group,
+  LineBasicMaterial,
+  LineSegments,
+  Loader,
+  Material,
+  Mesh,
+  MeshPhongMaterial,
+  Points,
+  PointsMaterial,
+  Vector3,
+  Color
+} from 'three'
 
 export default {
   name: 'ThreeTest',
@@ -88,11 +104,43 @@ export default {
       grid.material.transparent = true
       this.scene.add(grid)
 
+      // //texture
+      // // instantiate a loader
+      const textureLoader = new THREE.TextureLoader()
+
+      // //immediately use the texture for material creation
+      // const material = new THREE.MeshBasicMaterial({ map: texture })
+
       //model
       var loader = new FBXLoader()
-      loader.load('static/moon0/source/M.fbx', geometry => {
-        this.scene.add(geometry)
-      })
+      loader.load(
+        'static/moon0/source/M.fbx',
+        //scene add
+        object => {
+          object.traverse(function (child) {
+            if (child.isMesh) {
+              textureLoader.load('static/moon0/textures/x.jpg', texture => {
+                child.material.map = texture
+                child.material.needsupdate = true
+                console.log('#', texture)
+              })
+              //console.log(child.geometry.attributes.uv)
+
+              child.castShadow = true
+              child.receiveShadow = true
+            }
+          })
+          this.scene.add(object)
+        },
+        //call when loading is in progresses
+        function (xhr) {
+          console.log((xhr.loaded / xhr.total) * 100 + '%loaded')
+        },
+        //called when loading has errors
+        function (error) {
+          console.log('an error happened')
+        }
+      )
       // loader.load('static/moon0/source/M.fbx', function (object) {
       //   // object.mixer = new THREE.AnimationMixer(object)
       //   // this.mixers.push(object.mixer)
@@ -127,7 +175,6 @@ export default {
       this.camera.updateProjectionMatrix()
 
       this.renderer.setSize(window.innerWidth, window.innerHeight)
-      console.log('test99')
     },
     animate: function () {
       //domElement ㄱㅘㄴ련
