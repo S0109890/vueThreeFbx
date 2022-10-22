@@ -58,7 +58,7 @@ export default {
 
       this.scene = new THREE.Scene()
       this.scene.background = new THREE.Color(0xa0a0a0)
-      this.scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000)
+      this.scene.fog = new THREE.Fog(0xa0a0a0, 100, 2000)
 
       this.light = new THREE.HemisphereLight(0xffffff, 0x444444)
       this.light.position.set(0, 200, 0)
@@ -73,20 +73,20 @@ export default {
       // this.light.shadow.camera.right = 120
       this.scene.add(this.light)
 
-      //ground
-      var mesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(2000, 2000),
-        new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false })
-      )
-      mesh.rotation.x = -Math.PI / 2
-      mesh.receiveShadow = true
-      this.scene.add(mesh)
+      // //ground
+      // var mesh = new THREE.Mesh(
+      //   new THREE.PlaneGeometry(2000, 2000),
+      //   new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false })
+      // )
+      // mesh.rotation.x = -Math.PI / 2
+      // mesh.receiveShadow = true
+      // this.scene.add(mesh)
 
-      //grid
-      var grid = new THREE.GridHelper(2000, 20, 0x000000, 0x000000)
-      grid.material.opacity = 0.2
-      grid.material.transparent = true
-      this.scene.add(grid)
+      // //grid
+      // var grid = new THREE.GridHelper(2000, 20, 0x000000, 0x000000)
+      // grid.material.opacity = 0.2
+      // grid.material.transparent = true
+      // this.scene.add(grid)
 
       // // //texture
       // // // instantiate a loader
@@ -113,11 +113,30 @@ export default {
       //   //envMapIntensity: API.envMapIntensity
       // })
 
+      // bg img
+      const imageLoader = new THREE.TextureLoader()
+      imageLoader.load('static/moon0/360_img.jpg', data => {
+        const material = new THREE.MeshBasicMaterial({
+          map: data,
+          side: THREE.BackSide
+          // side: THREE.FrontSide,
+        })
+        const geometry = new THREE.SphereGeometry(400, 32, 32)
+        const imgBGMesh = new THREE.Mesh(geometry, material)
+        this.scene.add(imgBGMesh)
+      })
+
+      //this.renderer.render(this.scene, this.camera)
+
       //model
       var fbxloader = new FBXLoader()
       fbxloader.load(
         'static/moon0/source/m1.fbx',
         object => {
+          object.scale.set(1, 1, 1)
+          object.position.y = 100
+          // object.position.x = -25;
+          object.position.z = -100
           this.scene.add(object)
           console.log(object)
         },
@@ -181,7 +200,8 @@ export default {
       //   this.scene.add(object)
       // })
 
-      //window.addEventListener('resize', this.onWindowResize, false)
+      //윈도우 리사이즈
+      window.addEventListener('resize', this.onWindowResize, false)
 
       // //stats
       // this.stats = new Stats()
