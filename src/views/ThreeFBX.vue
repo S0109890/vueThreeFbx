@@ -6,22 +6,6 @@ import * as THREE from 'three'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Stats } from 'three/examples/jsm/libs/stats.module.js'
-import {
-  BufferGeometry,
-  FileLoader,
-  Float32BufferAttribute,
-  Group,
-  LineBasicMaterial,
-  LineSegments,
-  Loader,
-  Material,
-  Mesh,
-  MeshPhongMaterial,
-  Points,
-  PointsMaterial,
-  Vector3,
-  Color
-} from 'three'
 
 export default {
   name: 'ThreeTest',
@@ -104,43 +88,76 @@ export default {
       grid.material.transparent = true
       this.scene.add(grid)
 
-      // //texture
-      // // instantiate a loader
-      const textureLoader = new THREE.TextureLoader()
+      // // //texture
+      // // // instantiate a loader
+      // const textureLoader = new THREE.TextureLoader()
+      // //color
+      // const colorTexture = textureLoader.load('static/moon0/tex/m_basecolor.png')
+      // colorTexture.encoding = THREE.sRGBEncoding
+      // //normal
+      // const normalTexutre = textureLoader.load('static/moon0/tex/m_normal.png')
+      // normalTexutre.anisotropy = 4
+      // //roughness
+      // const roughnessTexture = textureLoader.load('static/moon0/tex/m_roughness.png')
+      // //metalness
+      // const metalnessTexture = textureLoader.load('static/moon0/tex/m_metallic.png')
 
-      // //immediately use the texture for material creation
-      // const material = new THREE.MeshBasicMaterial({ map: texture })
+      // //material
+      // const standardMaterial = new THREE.MeshStandardMaterial({
+      //   map: colorTexture,
+      //   normalMap: normalTexutre,
+      //   metalness: 1,
+      //   metalnessMap: metalnessTexture,
+      //   roughnessMap: roughnessTexture,
+      //   roughness: 1
+      //   //envMapIntensity: API.envMapIntensity
+      // })
 
       //model
-      var loader = new FBXLoader()
-      loader.load(
-        'static/moon0/source/M.fbx',
-        //scene add
+      var fbxloader = new FBXLoader()
+      fbxloader.load(
+        'static/moon0/source/m1.fbx',
         object => {
-          object.traverse(function (child) {
-            if (child.isMesh) {
-              textureLoader.load('static/moon0/textures/x.jpg', texture => {
-                child.material.map = texture
-                child.material.needsupdate = true
-                console.log('#', texture)
-              })
-              //console.log(child.geometry.attributes.uv)
-
-              child.castShadow = true
-              child.receiveShadow = true
-            }
-          })
           this.scene.add(object)
+          console.log(object)
         },
-        //call when loading is in progresses
-        function (xhr) {
-          console.log((xhr.loaded / xhr.total) * 100 + '%loaded')
+        xhr => {
+          console.log(xhr.loaded / xhr.total) * 100 + '% loaded'
         },
-        //called when loading has errors
-        function (error) {
-          console.log('an error happened')
+        error => {
+          console.log(error)
         }
       )
+      // loader.load(
+      //   'static/moon0/source/M.fbx',
+      //   //material
+      //   standardMaterial,
+      //   //scene add
+      //   object => {
+      //     object.traverse(function (child) {
+      //       if (child.isMesh) {
+      //         textureLoader.load('static/moon0/textures/x.jpg', texture => {
+      //           child.material.map = texture
+      //           child.material.needsupdate = true
+      //           console.log('#', texture)
+      //         })
+      //         //console.log(child.geometry.attributes.uv)
+
+      //         child.castShadow = true
+      //         child.receiveShadow = true
+      //       }
+      //     })
+      //     this.scene.add(object)
+      //   },
+      //   //call when loading is in progresses
+      //   function (xhr) {
+      //     console.log((xhr.loaded / xhr.total) * 100 + '%loaded')
+      //   },
+      //   //called when loading has errors
+      //   function (error) {
+      //     console.log('an error happened')
+      //   }
+      // )
       // loader.load('static/moon0/source/M.fbx', function (object) {
       //   // object.mixer = new THREE.AnimationMixer(object)
       //   // this.mixers.push(object.mixer)
