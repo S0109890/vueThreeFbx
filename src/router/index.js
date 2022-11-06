@@ -19,6 +19,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "three", webpackPrefetch:ture */ '../views/Three.vue')
   },
   {
+    path: '/mqtt',
+    name: 'Mqtt',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "mqtt", webpackPrefetch:ture */ '../views/Mqtt_.vue')
+  },
+  {
     path: '/threeFBX',
     name: 'FBX',
     // route level code-splitting

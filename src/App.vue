@@ -2,7 +2,7 @@
   <div id="app">
     <div id="nav">
       <router-link to="/threeFBX">FBX</router-link> |
-      <router-link to="/three">Three</router-link>
+      <router-link to="/mqtt">MQTT</router-link>
     </div>
     <router-view />
   </div>
